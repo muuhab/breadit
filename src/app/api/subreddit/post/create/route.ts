@@ -1,7 +1,7 @@
-import { SubredditSubscriptionValidator } from "@/lib/validators/subreddit";
-import { getAuthSesssion } from "@/app/api/auth/[...nextauth]/route";
 import { db } from "@/lib/db";
 import { z } from "zod";
+import { getAuthSesssion } from "@/app/api/auth/[...nextauth]/route";
+import { PostValidator } from "@/lib/validators/post";
 
 export async function POST(req: Request) {
   try {
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
     if (!session?.user) return new Response("Unauthorized", { status: 401 });
 
     const body = await req.json();
-    const { subredditId } = SubredditSubscriptionValidator.parse(body);
+    const { subredditId, title, content } = PostValidator.parse(body);
 
     const subscriptionExists = await db.subscription.findFirst({
       where: {
@@ -17,23 +17,28 @@ export async function POST(req: Request) {
         userId: session.user.id,
       },
     });
-    if (subscriptionExists)
-      return new Response("You are already subscribed", { status: 400 });
+    if (!subscriptionExists)
+      return new Response("Subscribe to post", { status: 400 });
 
-    await db.subscription.create({
+    await db.post.create({
       data: {
-        userId: session.user.id,
-        subredditId: subredditId,
+        title,
+        content,
+        subredditId,
+        authorId: session.user.id,
       },
     });
 
-    return new Response(subredditId);
+    return new Response("OK");
   } catch (error) {
     if (error instanceof z.ZodError)
       return new Response("Invalid request data passed", { status: 422 });
   }
 
-  return new Response("Could not subscribed, please try again later", {
-    status: 500,
-  });
+  return new Response(
+    "Could not post to subreddit at this time please try again later",
+    {
+      status: 500,
+    }
+  );
 }
