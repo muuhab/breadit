@@ -8,8 +8,9 @@ import type EditorJS from '@editorjs/editorjs'
 import { uploadFiles } from '@/lib/uploadthing'
 import { toast } from '@/hooks/use-toast'
 import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { usePathname, useRouter } from 'next/navigation'
+import { useCustomToast } from '@/hooks/use-custom-toast'
 
 interface EditorProps {
     subredditId: string
@@ -31,6 +32,7 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
     const [isMounted, setIsMounted] = useState<boolean>(false)
     const pathname = usePathname()
     const router = useRouter()
+    const { loginToast } = useCustomToast()
 
     const initializeEditor = useCallback(async () => {
         const EditorJS = (await import('@editorjs/editorjs')).default
@@ -129,7 +131,11 @@ const Editor: FC<EditorProps> = ({ subredditId }) => {
             const { data } = await axios.post('/api/subreddit/post/create', payload)
             return data
         },
-        onError: () => {
+        onError: (err) => {
+            if (err instanceof AxiosError) {
+                if (err.response?.status === 401)
+                    return loginToast()
+            }
             return toast({
                 title: 'Something went wrong',
                 description: 'Your post could not be created',

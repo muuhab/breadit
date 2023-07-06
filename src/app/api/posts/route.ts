@@ -1,6 +1,5 @@
 import { db } from "@/lib/db";
 import { getAuthSesssion } from "../auth/[...nextauth]/route";
-import { sub } from "date-fns";
 import { z } from "zod";
 
 export async function GET(req: Request) {
