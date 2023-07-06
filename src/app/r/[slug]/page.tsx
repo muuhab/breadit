@@ -1,5 +1,6 @@
 import { getAuthSesssion } from '@/app/api/auth/[...nextauth]/route'
 import MiniCreatePost from '@/components/MiniCreatePost'
+import PostFeed from '@/components/PostFeed'
 import { INFINITE_SCROLLING_PAGINATION_RESULTS } from '@/config'
 import { db } from '@/lib/db'
 import { notFound } from 'next/navigation'
@@ -39,6 +40,7 @@ const Page = async ({ params }: pageProps) => {
                 r/{subreddit.name}
             </h1>
             <MiniCreatePost session={session} />
+            <PostFeed initialPosts={subreddit.posts} subredditName={subreddit.name} />
         </>
     )
 }
