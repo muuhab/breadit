@@ -35,7 +35,7 @@ export async function POST(req: Request) {
   } catch (error) {
     if (error instanceof z.ZodError)
       return new Response(error.message, { status: 422 });
-  }
 
-  return new Response("Could not create Subreddit", { status: 500 });
+    return new Response("Could not create Subreddit", { status: 500 });
+  }
 }

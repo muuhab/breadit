@@ -31,9 +31,9 @@ export async function POST(req: Request) {
   } catch (error) {
     if (error instanceof z.ZodError)
       return new Response("Invalid request data passed", { status: 422 });
-  }
 
-  return new Response("Could not subscribed, please try again later", {
-    status: 500,
-  });
+    return new Response("Could not subscribed, please try again later", {
+      status: 500,
+    });
+  }
 }

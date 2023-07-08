@@ -1,3 +1,4 @@
+import CommentsSesction from '@/components/comments/CommentsSesction'
 import EditorOutput from '@/components/EditorOutput'
 import PostVoteServer from '@/components/post-vote/PostVoteServer'
 import { buttonVariants } from '@/components/ui/Button'
@@ -6,7 +7,7 @@ import { redis } from '@/lib/redis'
 import { formatTimeToNow } from '@/lib/utils'
 import { CachedPost } from '@/types/redis'
 import { Post, User, Vote } from '@prisma/client'
-import { ArrowBigDown, ArrowBigUp, Loader2 } from 'lucide-react'
+import { ArrowBigDown, ArrowBigUp, Loader, Loader2 } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -53,7 +54,7 @@ const page = async ({ params }: pageProps) => {
                 {/* @ts-expect-error server component */}
                 <PostVoteServer
                     postId={post?.id ?? cachedPost.id}
-                    getData={getDataFun}
+                    getData={() => getDataFun()}
                 />
             </Suspense>
             <div className="sm:w-0 w-full flex-1 bg-white p-4 rounded-sm">
@@ -68,6 +69,13 @@ const page = async ({ params }: pageProps) => {
                 <EditorOutput
                     content={post?.content ?? cachedPost.content}
                 />
+                <Suspense fallback={<Loader className='h-5 w-5 animate-spin text-zinc-500' />}>
+                    {/* @ts-expect-error server component */}
+                    <CommentsSesction postId={
+                        post?.id ?? cachedPost.id
+                    } />
+
+                </Suspense>
             </div>
         </div>
     </div>
