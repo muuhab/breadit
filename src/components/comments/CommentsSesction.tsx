@@ -1,6 +1,5 @@
 import { getAuthSesssion } from '@/app/api/auth/[...nextauth]/route'
 import { db } from '@/lib/db'
-import { FC } from 'react'
 import PostComment from './PostComment'
 import CreateComment from './CreateComment'
 
