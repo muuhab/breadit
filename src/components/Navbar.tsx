@@ -3,6 +3,7 @@ import { Icons } from "./ui/Icons";
 import { buttonVariants } from "./ui/Button";
 import { getAuthSesssion } from "@/app/api/auth/[...nextauth]/route";
 import UserAccountNav from "./UserAccountNav";
+import SearchBar from "./SearchBar";
 
 const Navbar = async () => {
     const session = await getAuthSesssion();
@@ -14,7 +15,7 @@ const Navbar = async () => {
                     Breadit
                 </p>
             </Link>
-            {/*search bar*/}
+            <SearchBar />
             {
                 session?.user ? <UserAccountNav user={session.user} /> : <Link href="/sign-in" className={buttonVariants()}>
                     Sign In

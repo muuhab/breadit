@@ -1,8 +1,8 @@
 import { getAuthSesssion } from "@/app/api/auth/[...nextauth]/route"
 import SubscribeLeaveToggle from "@/components/SubscribeLeaveToggle"
-import { Button, buttonVariants } from "@/components/ui/Button"
+import { buttonVariants } from "@/components/ui/Button"
 import { db } from "@/lib/db"
-import { format, sub } from "date-fns"
+import { format } from "date-fns"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
