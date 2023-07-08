@@ -23,14 +23,13 @@ const PostFeed: FC<PostFeedProps> = ({
         root: lastPostRef.current,
         threshold: 1,
     })
-
     const { data: session } = useSession()
 
     const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
         ['infinite-query'],
         async ({ pageParam = 1 }) => {
             const query = `/api/posts?limit=${INFINITE_SCROLLING_PAGINATION_RESULTS}&page=${pageParam}` +
-                (!!subredditName ? `&subreddit=${subredditName}` : '')
+                (!!subredditName ? `&subredditName=${subredditName}` : '')
 
             const { data } = await axios.get(query)
             return data as ExtendedPost[]

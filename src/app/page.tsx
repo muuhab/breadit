@@ -5,6 +5,9 @@ import { getAuthSesssion } from "./api/auth/[...nextauth]/route";
 import GeneralFeed from "@/components/homepage/GeneralFeed";
 import CustomFeed from "@/components/homepage/CustomFeed";
 
+export const dynamic = 'force-dynamic'
+export const fetchCache = 'force-no-store'
+
 export default async function Home() {
   const session = await getAuthSesssion()
 
